@@ -1,8 +1,5 @@
 import { streamText } from "ai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-const google = createGoogleGenerativeAI({
-    apiKey: process.env.GEMINI_API_KEY
-})
+import { google } from "@/libs/googleAI";
 export async function POST(req: Request) {
     try {
         const { prompt } = await req.json();
