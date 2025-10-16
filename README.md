@@ -12,8 +12,12 @@
 - **Xác thực Schema:** [Zod](https://zod.dev/)
 - **Linting:** [ESLint](https://eslint.org/)
 ## 📁 Cấu trúc thư mục
+- `src/app/page.tsx`: Trang chính của ứng dụng, nơi chứa component `Chat`.
+- `libs`: Thư mục này chứa các hàm tiện ích để tương tác với Google Gemini API.
 - `src/app/ui/completion`: Là component hiển thị văn bản do AI tạo ra. Component này sẽ chờ cho đến khi nhận được đầy đủ nội dung rồi mới hiển thị (non-streaming).
 - `src/app/api/ai/route.ts`: Đây là API route sử dụng Vercel AI SDK để xử lý các yêu cầu chat và tương tác với Google Gemini API.
 - `src/app/ui/stream`: Là component hiển thị văn bản do AI tạo ra theo dạng streaming, nghĩa là nó sẽ hiển thị từng phần của văn bản ngay khi nhận được từ API.
 - `src/app/ui/chat`: Là component chính của ứng dụng chat, nơi người dùng có thể nhập câu hỏi và nhận câu trả lời từ AI và AI sẽ ghi nhớ đoạn hội thoại.
-- 
+- `src/app/ui/structured-data`: Là component hiển thị dữ liệu có cấu trúc (structured data) do AI tạo ra.
+- `src/app/api/structured-data/route.ts`: Đây là API route sử dụng Vercel AI SDK để xử lý các yêu cầu tạo dữ liệu có cấu trúc (structured data) từ AI.
+- `src/app/ui/structured-data/schema`: Chứa định nghĩa schema sử dụng Zod để xác thực dữ liệu có cấu trúc.
