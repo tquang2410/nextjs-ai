@@ -72,7 +72,7 @@ export default function StructuredDataPage() {
                         value={dishName}
                         onChange={(e) => setDishName(e.target.value)}
                         placeholder="Enter a dish name..."
-                        className="flex-1 dark:bg-zinc-800 p-2 border border-zinc-300 dark:border-zinc-700 rounded shadow-xl"
+                        className="flex-1 dark:bg-zinc-800 p-2 border border-zinc-300 dark:border-zinc-700 rounded shadow-xl "
                     />
                     {isLoading ? (
                         <button
