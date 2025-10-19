@@ -1,22 +1,31 @@
-import { google } from "@ai-sdk/google";
-import { experimental_generateImage as generateImage } from "ai";
+// route.ts
+import { GoogleGenAI } from "@google/genai";
 
 export async function POST(req: Request) {
     try {
         const { prompt } = await req.json();
 
-        const { image } = await generateImage({
-            model: google.imageModel("imagen-3.0-generate-001"), // Model Imagen của Google
+        const ai = new GoogleGenAI({
+            apiKey: process.env.GEMINI_API_KEY,
+        });
+
+        const response = await ai.models.generateImages({
+            model: "imagen-4.0-generate-001",
             prompt,
-            size: "1024x1024",
-            providerOptions: {
-                google: {
-                    personGeneration: "allow_all"
-                },
+            config: {
+                numberOfImages: 1,
             },
         });
 
-        return Response.json(image.base64);
+        const generatedImage = response.generatedImages?.[0];
+
+        if (!generatedImage?.image?.imageBytes) {
+            throw new Error("No image generated");
+        }
+
+        const imageBytes = generatedImage.image.imageBytes;
+
+        return Response.json(imageBytes);
     } catch (error) {
         console.error("Error generating image:", error);
         return new Response("Failed to generate image", { status: 500 });
