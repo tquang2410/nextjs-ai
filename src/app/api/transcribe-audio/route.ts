@@ -13,7 +13,9 @@ export async function POST(req: Request)
         const base64Audio = Buffer.from(arrayBuffer).toString("base64");
         const ai = new GoogleGenAI({})
         const contents = [
-            { text: "Transcribe this audio file. Provide only the transcript text without any additional commentary." },
+            {
+                // text: "Transcribe this audio file. Provide only the transcript text without any additional commentary." }, dùng cho model pro
+                text: "Transcribe this audio file clearly and professionally. Format the text with proper punctuation and paragraphs."},
             {
                 inlineData: {
                     mimeType: audioFile.type,
