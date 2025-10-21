@@ -7,6 +7,7 @@ export default function GenerateSpeechPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [hasAudio, setHasAudio] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false); // Để theo dõi trạng thái phát âm thanh
 
     const audioUrlRef = useRef<string | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -41,14 +42,19 @@ export default function GenerateSpeechPage() {
             }
 
             const blob = await response.blob();
-            console.log('Blob info:', {
-                type: blob.type,
-                size: blob.size
-            });
+            // console.log('Blob info:', {
+            //     type: blob.type,
+            //     size: blob.size
+            // });
 
             audioUrlRef.current = URL.createObjectURL(blob);
-            console.log('Audio URL:', audioUrlRef.current);
+            // console.log('Audio URL:', audioUrlRef.current);
             audioRef.current = new Audio(audioUrlRef.current);
+
+            // Cài đặt các sự kiện để theo dõi trạng thái phát âm thanh
+            audioRef.current.addEventListener('play', () => setIsPlaying(true));
+            audioRef.current.addEventListener('pause', () => setIsPlaying(false));
+            audioRef.current.addEventListener('ended', () => setIsPlaying(false));
 
             setHasAudio(true);
             audioRef.current.play();
@@ -71,7 +77,11 @@ export default function GenerateSpeechPage() {
             audioRef.current.play();
         }
     };
-
+    const pauseAudio = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+        }
+    };
     useEffect(() => {
         return () => {
             if (audioUrlRef.current) {
@@ -91,13 +101,48 @@ export default function GenerateSpeechPage() {
 
             {isLoading && <div className="text-center mb-4">Generating audio...</div>}
 
+            {isPlaying && (
+                <div className="mb-6 flex items-center justify-center gap-1 h-16">
+                    {[...Array(20)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="w-1 bg-blue-500 rounded-full animate-wave"
+                            style={{
+                                animationDelay: `${i * 0.05}s`,
+                                height: '100%'
+                            }}
+                        />
+                    ))}
+                </div>
+            )}
+
+            {/*{hasAudio && !isLoading && (*/}
+            {/*    <button*/}
+            {/*        onClick={replayAudio}*/}
+            {/*        className="mb-4 bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"*/}
+            {/*    >*/}
+            {/*        Replay Audio*/}
+            {/*    </button>*/}
+            {/*)}*/}
             {hasAudio && !isLoading && (
-                <button
-                    onClick={replayAudio}
-                    className="mb-4 bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                >
-                    Replay Audio
-                </button>
+                <div>
+                    {isPlaying
+                        ? (
+                        <button onClick={pauseAudio}
+                                className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition-colors"
+                        > ⏸ Pause </button>
+                    )
+                        : (
+                            <button
+                                onClick={replayAudio}
+                                className="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                            >
+                                ▶ Replay Audio
+                            </button>
+                        )
+                    }
+
+                </div>
             )}
 
             <form
