@@ -52,7 +52,8 @@ export async function POST(req: Request) {
         const result = streamText({
             model: google('models/gemini-2.0-flash-exp'),
             messages: convertToModelMessages(messages),
-            stopWhen: stepCountIs(3),
+            stopWhen: stepCountIs(3) // Dừng sau 3 bước: lấy tên, gọi tool lấy địa điểm, gọi tool lấy thời tiết
+            ,
             tools,
         });
         return result.toUIMessageStreamResponse();
