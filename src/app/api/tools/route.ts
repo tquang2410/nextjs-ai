@@ -50,7 +50,8 @@ export async function POST(req: Request){
                     ...convertToModelMessages(messages)
                 ],
                 tools,
-            stopWhen: stepCountIs(2),
+            stopWhen: stepCountIs(2) // Dừng sau 2 bước: AI nhận đầu vào là tên thành phố, sau đó gọi tool và trả về kết quả
+            ,
             }
         );
 
